@@ -22,11 +22,9 @@ cnxn.commit()
 
 
 # first we setup our query
-query = ("INSERT INTO space_missions (company_name) VALUES (5)")
-
-
-cursor.execute(query)
-cnxn.commit()  
+# query = ("INSERT INTO space_missions (company_name) VALUES (5)")
+# cursor.execute(query)
+# cnxn.commit()  
 
 cursor.execute("SELECT * FROM space_missions")
 my_result = cursor.fetchone()
