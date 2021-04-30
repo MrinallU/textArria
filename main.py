@@ -1,5 +1,7 @@
 import mysql.connector
 from mysql.connector.constants import ClientFlag
+from player import Player
+
 
 config = {
     'user': 'root',
@@ -31,3 +33,6 @@ my_result = cursor.fetchone()
 while my_result is not None:
     print(my_result)
     my_result = cursor.fetchone()
+
+p = Player(0, 0, 100)
+print(p.hp)
