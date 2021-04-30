@@ -1,7 +1,30 @@
 import mysql.connector
-from mysql.connector.constants import ClientFlag
-from player import Player
+import os
 
+from player import Player
+from time import sleep
+from mysql.connector.constants import ClientFlag
+
+# pip install mysql-connector-python
+p = Player(0, 0, 100)
+prevGrid = [
+  ["@", "#", "#"],
+  ["0", "@", "@"],
+  ["@", "@", "@"],
+]
+grid = [
+  ["P", "#", "#"],
+  ["0", "@", "@"],
+  ["@", "@", "@"],
+]
+
+def renderLevel(dir, grid):
+  os.system('clear')
+
+  for val in grid:
+    for x in val:
+      print(x,end = " ")
+    print()
 
 config = {
     'user': 'root',
@@ -28,11 +51,21 @@ cnxn.commit()
 # cursor.execute(query)
 # cnxn.commit()  
 
-cursor.execute("SELECT * FROM space_missions")
-my_result = cursor.fetchone()
-while my_result is not None:
-    print(my_result)
-    my_result = cursor.fetchone()
+# cursor.execute("SELECT * FROM space_missions")
+# my_result = cursor.fetchone()
+# while my_result is not None:
+#     print(my_result)
+#     my_result = cursor.fetchone()
 
-p = Player(0, 0, 100)
-print(p.hp)
+
+
+gameLoop = True
+renderLevel("n", grid)
+while gameLoop == True:
+  dir = input("Enter the dir you want to go in (w, a, s, d): ")
+  grid[p.y][p.x] = prevGrid[p.y][p.x]
+  p.move(dir, grid)
+  grid[p.y][p.x] = "P"
+  renderLevel(dir, grid)
+  print(p.x, end=" ")
+  print(p.y)
