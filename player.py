@@ -1,21 +1,25 @@
 import sys
+from item import item
 
 def inBounds(x, y, colNums, rowNums, grid):
   if(x == colNums or rowNums == y or x < 0 or y < 0):
     return False
   else:
-    if grid[y][x] != '#':
+    if grid[y][x] != '🌳':
       return True
   return False
 
 class Player:
-  def __init__(self, x, y, hp):
+  def __init__(self, x, y, hp, money, currItem):
     self.x = x
     self.y = y
     self.hp = hp
-
-
-
+    self.money = money
+    self.inventory = [
+      [item("Dagger", True, "🗡️", 10 )], 
+      [item("Bread", False, "🍞", 10)]
+    ]
+    self.currItem = currItem
   def move(self, dir, grid):
     prevX = self.x
     prevY = self.y

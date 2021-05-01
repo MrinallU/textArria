@@ -2,29 +2,67 @@ import mysql.connector
 import os
 
 from player import Player
+from item import item
 from time import sleep
 from mysql.connector.constants import ClientFlag
 
 # pip install mysql-connector-python
-p = Player(0, 0, 100)
+p = Player(0, 0, 100, 20, item("Dagger", True, "🗡️", 10 ))
 prevGrid = [
-  ["@", "#", "#"],
-  ["0", "@", "@"],
-  ["@", "@", "@"],
+  [" @", "🏪", "🌳"],
+  [" @", "@", "@"],
+  [" 🌳", "@", "0"],
 ]
 grid = [
-  ["P", "#", "#"],
-  ["0", "@", "@"],
+  ["👤", "🏪", "🌳"],
   ["@", "@", "@"],
+  ["🌳", "🌳", "0"],
 ]
 
 def renderLevel(dir, grid):
   os.system('clear')
-
   for val in grid:
     for x in val:
-      print(x,end = " ")
+      print(x,end = "     ")
     print()
+
+def renderInventory(dir):
+  os.system('clear')
+  if(dir == 'i'):
+    n = 0
+    for i in p.inventory:
+      if n == 0:
+        print("Weapons")
+      else:
+        print("Medicine")
+      print("---------")
+      for j in i:
+        print(j,end = " ")
+      print()
+      n += 1
+    loop = True
+    while loop:
+      cmd = input("Press e to exit or type name of item to use: ")
+      if cmd == 'e':
+        break
+      else:
+        isValidItem = False
+        item = 0
+        for i in p.inventory:
+          for j in i:
+            if j.name == cmd:
+              isValidItem = True
+              item = j
+              break
+        if isValidItem:
+          p.currItem = item
+          loop = False
+        else:
+          print("Invalid Item")
+
+
+
+
 
 config = {
     'user': 'root',
@@ -63,9 +101,20 @@ gameLoop = True
 renderLevel("n", grid)
 while gameLoop == True:
   dir = input("Enter the dir you want to go in (w, a, s, d): ")
+
   grid[p.y][p.x] = prevGrid[p.y][p.x]
   p.move(dir, grid)
-  grid[p.y][p.x] = "P"
+
+  grid[p.y][p.x] = "👤"
+  renderInventory(dir)
   renderLevel(dir, grid)
+
   print(p.x, end=" ")
   print(p.y)
+  print("Current Item",end=" ")
+  print(repr(p.currItem))
+
+  if prevGrid[p.y][p.x] == '0':
+    os.system('clear')
+    print("Congrats!")
+    gameLoop = False
