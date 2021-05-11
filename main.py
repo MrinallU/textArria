@@ -1,23 +1,28 @@
 import mysql.connector
 import os
+import time
 
 from player import Player
+from player import monsterB
 from item import item
 from time import sleep
 from mysql.connector.constants import ClientFlag
 
 # pip install mysql-connector-python
-p = Player(0, 0, 100, 20, item("Dagger", True, "🗡️", 10 ))
-prevGrid = [
-  [" @", "🏪", "🌳"],
-  [" @", "@", "@"],
-  [" 🌳", "@", "0"],
-]
+p = Player(0, 0, 10, 10, item("Bread", False, "🍞", 3))
 grid = [
-  ["👤", "🏪", "🌳"],
-  ["@", "@", "@"],
-  ["🌳", "🌳", "0"],
+  ["👤", "🏪", "🌳", "@", "@"],
+  ["@", "@", "@", "@", "👹"],
+  ["🌳", "🌳", "🚪", "@", "@"],
 ]
+
+prevGrid = [
+
+  ["@", "🏪", "🌳", "@", "@"],
+  ["@", "@", "@", "@", "👹"],
+  ["🌳", "🌳", "🚪", "@", "@"],
+]
+
 
 def renderLevel(dir, grid):
   os.system('clear')
@@ -37,7 +42,8 @@ def renderInventory(dir):
         print("Medicine")
       print("---------")
       for j in i:
-        print(j,end = " ")
+        print(j.name + " ",end=repr(j))
+        print()
       print()
       n += 1
     loop = True
@@ -95,26 +101,56 @@ cnxn.commit()
 #     print(my_result)
 #     my_result = cursor.fetchone()
 
+print("Venture through the forest and defeat the monster in the forest and exit through the door to complete the quest!")
+time.sleep(1)
+print()
+print("Tip: Visit the shop to purchace the goods needed to beat the monster.")
+time.sleep(2.5)
 
+os.system('clear')
 
 gameLoop = True
+monsterIsBeat = False
+fst = False
+prevX = 0
+prevY = 0
 renderLevel("n", grid)
 while gameLoop == True:
+  prevX = p.x
+  prevY = p.y
+  print("Press 'i' to open inventory")
   dir = input("Enter the dir you want to go in (w, a, s, d): ")
 
-  grid[p.y][p.x] = prevGrid[p.y][p.x]
+  grid[p.y][p.x] = prevGrid[p.y][p.x] 
   p.move(dir, grid)
+
+  if(p.questComplete() == True and fst == False):
+    p.x -= 1
+    grid[1][4] = "💀"
+    prevGrid[1][4] = "💀"
+    fst = True
 
   grid[p.y][p.x] = "👤"
   renderInventory(dir)
   renderLevel(dir, grid)
 
+
+
   print(p.x, end=" ")
   print(p.y)
   print("Current Item",end=" ")
   print(repr(p.currItem))
+  print("Funds", end=" ")
+  print("$" + str(p.money))
 
-  if prevGrid[p.y][p.x] == '0':
+  print()
+
+  if  prevGrid[p.y][p.x] == '🚪' and monsterB == False:
     os.system('clear')
-    print("Congrats!")
-    gameLoop = False
+    print("Beat the monster first! What kind of hero are you?!")
+    time.sleep(2)
+    grid[p.y][p.x] = prevGrid[p.y][p.x]
+    p.x = prevX
+    p.y = prevY
+    grid[p.y][p.x] = "👤"
+    renderLevel(dir, grid)

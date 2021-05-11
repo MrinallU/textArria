@@ -3,6 +3,7 @@ class item:
     self.name = name
     self.doesDamage = doesDamage
     self.appearence = appearence
+    self.val = val
   def __repr__(self):
     return self.appearence
   def getStat(self):

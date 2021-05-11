@@ -1,0 +1,31 @@
+[[package]]
+category = "main"
+description = "MySQL driver written in Python"
+name = "mysql-connector"
+optional = false
+python-versions = "*"
+version = "2.2.9"
+
+[[package]]
+category = "main"
+description = "Pretty-print tabular data"
+name = "tabulate"
+optional = false
+python-versions = "*"
+version = "0.8.9"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[metadata]
+content-hash = "9e155042757ed95b77f3818ec42c1bbedf35e9e40330cff091daaf073dbb1add"
+python-versions = "^3.8"
+
+[metadata.files]
+mysql-connector = [
+    {file = "mysql-connector-2.2.9.tar.gz", hash = "sha256:1733e6ce52a049243de3264f1fbc22a852cb35458c4ad739ba88189285efdf32"},
+]
+tabulate = [
+    {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
+    {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
+]
