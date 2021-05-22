@@ -1,9 +1,28 @@
 import sys
 import os
+import mysql.connector
 import time
 import random
+import mysql.connector
+
 from tabulate import tabulate
+from mysql.connector.constants import ClientFlag
 from item import item
+
+config = {
+    'user': 'root',
+    'password': 'Thekey2275!',
+    'host': '35.223.103.123',
+    'client_flags': [ClientFlag.SSL],
+    'ssl_ca': 'ssl/server-ca.pem',
+    'ssl_cert': 'ssl/client-cert.pem',
+    'ssl_key': 'ssl/client-key.pem'
+}
+
+config['database'] = 'saves' 
+
+cnxn = mysql.connector.connect(**config)
+cursor = cnxn.cursor()
 
 l = [["Dagger", 10, "Common"], ["Master Sword", 100, "Mythical"], ["Poison Potion", 25, "Rare"]]
 monsterB = False
@@ -31,7 +50,7 @@ def getItemData(itemName):
       return i
 
 class Player:
-  def __init__(self, x, y, hp, money, currItem):
+  def __init__(self, name, x, y, hp, money, currItem):
     self.maxhp = 10
     self.x = x
     self.y = y
@@ -42,6 +61,8 @@ class Player:
       [item("Bread", False, "🍞", 3)]
     ]
     self.currItem = currItem
+
+
   
   def remItem(self):
     index = 0
@@ -158,6 +179,7 @@ def renderShop(p):
           print("Item Purchaced!")
           found = True
           p.money -= i[1]
+          print("Funds remaining: $" + str(p.money))
           val = 0 if getItemData(toBuy).doesDamage else 1
           p.inventory[val].append(getItemData(toBuy))
         else:
@@ -166,7 +188,7 @@ def renderShop(p):
 
     if found == False:
       print("Sorry, but I don't seem to have that item...")
-    time.sleep(0.7)
+    time.sleep(0.9)
 
     n += 1
 
@@ -230,6 +252,7 @@ def renderBattle(p):
         os.system('clear')
         print("You ran out of health and died.")
         time.sleep(0.8)
+    time.sleep(0.8)
   
 
     if(monsterHealth <= 0):
@@ -245,7 +268,7 @@ def renderBattle(p):
       time.sleep(2)
     elif(p.hp <= 0):
       os.system('clear')
-      print('Oh no you lost! Re-enter the game to pick up form your last save.')
+      print('Oh no you lost! Re-enter the game to pick up from your last save.')
       quit()
 
     n += 1

@@ -9,7 +9,7 @@ from time import sleep
 from mysql.connector.constants import ClientFlag
 
 # pip install mysql-connector-python
-p = Player(0, 0, 10, 10, item("Bread", False, "🍞", 3))
+
 grid = [
   ["👤", "🏪", "🌳", "@", "@"],
   ["@", "@", "@", "@", "👹"],
@@ -81,13 +81,37 @@ config = {
 }
 
 
+# cursor.execute('CREATE DATABASE saves') 
 
 
-config['database'] = 'testdb' 
+
+config['database'] = 'saves' 
+
 cnxn = mysql.connector.connect(**config)
 cursor = cnxn.cursor()
+name = input("Enter name (if you have played this game before then enter the name you entered the previous time to reclaim your progress): ")
+# cursor.execute("CREATE TABLE names (""name VARCHAR(265))")
+# cnxn.commit()
 
-cnxn.commit() 
+# cursor.execute("CREATE TABLE test4 ("
+# "name VARCHAR(100),"
+# "saveNum INT(100),"
+# "money INT(200),"
+# "x INT(100),"
+# "y INT(100),"
+# "hp INT(100))")
+# cnxn.commit()
+
+# if name does not exist
+# cursor.execute("INSERT INTO test3 (name, saveNum, money, x, y, hp) values (test_user, 1, 10, 0, 0, 10)")
+# cnxn.commit()
+
+# saveList = cursor.execute("SELECT saveNum FROM test3")
+# print(cursor.fetchone()[0])
+# print(saveList)
+cnxn.close()  
+
+  # this commits changes to the database
 
 
 # first we setup our query
@@ -115,6 +139,8 @@ fst = False
 prevX = 0
 prevY = 0
 renderLevel("n", grid)
+p = Player(name, 0, 0, 10, 10, item("Bread", False, "🍞", 3))
+
 while gameLoop == True:
   prevX = p.x
   prevY = p.y
